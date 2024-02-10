@@ -1,27 +1,27 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector <int> dp;
+vector <int> position;
 
 int solve(int l, int r, int x) {
     if (l == r) return l;
 
     int mid = (l + r) / 2;
-    if (dp[mid] >= x) return solve(l, mid, x);
+    if (position[mid] >= x) return solve(l, mid, x);
     return solve(mid + 1, r, x);
 }
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
 
-    dp.push_back(0);
-    dp.push_back(1);
-    dp.push_back(3);
+    position.push_back(0);
+    position.push_back(1);
+    position.push_back(3);
     for (int i = 3, j = 2;; i++) {
-        if (i > dp[j]) j++;
+        if (i > position[j]) j++;
 
-        dp.push_back(dp.back() + j);
-        if (dp.back() > 2e9) break;
+        position.push_back(position.back() + j);
+        if (position.back() > 2e9) break;
     }
 
     int N;
@@ -31,7 +31,7 @@ int main() {
         int X;
         cin >> X;
         
-        cout << solve(1, dp.size() - 1, X) << '\n';
+        cout << solve(1, position.size() - 1, X) << '\n';
     }
     return 0;
 }
