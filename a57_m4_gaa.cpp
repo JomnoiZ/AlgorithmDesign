@@ -2,11 +2,6 @@
 using namespace std;
 
 char solve(int k, int n, int x) {
-    if (k == 0) {
-        if (x == 1) return 'g';
-        return 'a';
-    }
-
     int m = (n - k) / 2;
     if (x <= m) return solve(k - 1, m, x);
     if (x - m <= k) {
