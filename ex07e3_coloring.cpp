@@ -3,7 +3,6 @@ using namespace std;
 
 const int MAX_N = 55;
 
-int n;
 vector <int> graph[MAX_N];
 int color[MAX_N];
 bool visited[MAX_N];
@@ -32,18 +31,10 @@ bool dfs(int u, int k) {
     return false;
 }
 
-bool solve(int k) {
-    for (int i = 0; i < n; i++) color[i] = -1, visited[i] = false;
-    for (int i = 0; i < n; i++) {
-        if (visited[i] == false and dfs(i, k) == false) return false;
-    }
-    return true;
-}
-
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
 
-    int m;
+    int n, m;
     cin >> n >> m;
 
     while (m--) {
@@ -58,7 +49,16 @@ int main() {
     while (l <= r) {
         int mid = (l + r) / 2;
 
-        if (solve(mid) == true) r = mid - 1, ans = mid;
+        bool ok = true;
+        for (int i = 0; i < n; i++) color[i] = -1, visited[i] = false;
+        for (int i = 0; i < n; i++) {
+            if (visited[i] == false and dfs(i, mid) == false) {
+                ok = false;
+                break;
+            }
+        }
+
+        if (ok == true) r = mid - 1, ans = mid;
         else l = mid + 1;
     }
     cout << ans;
