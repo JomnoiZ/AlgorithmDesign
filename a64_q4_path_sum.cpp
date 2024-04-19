@@ -11,22 +11,16 @@ bool solve(const int &u, const int &tw, const int &K) {
 
     int maxw = tw;
     for (int i = 0; i < n; i++) {
-        if (visited[i] == true) continue;
-
-        int opt = 0;
-        for (auto &[v, w] : graph[i]) {
-            if (opt < w and (visited[v] == false or v == u)) opt = w;
-        }
-        maxw += opt;
+        if (visited[i] == false and !graph[i].empty()) maxw += graph[i][0].first;
     }
     if (maxw < K) return false;
 
-    for (auto &[v, w] : graph[u]) {
+    for (auto &[w, v] : graph[u]) {
         if (visited[v] == true) continue;
 
-        visited[u] = true;
+        visited[v] = true;
         bool ok = solve(v, tw + w, K);
-        visited[u] = false;
+        visited[v] = false;
 
         if (ok == true) return true;
     }
@@ -45,9 +39,11 @@ int main() {
         int a, b, w;
         cin >> a >> b >> w;
 
-        graph[a].emplace_back(b, w);
-        graph[b].emplace_back(a, w);
+        graph[a].emplace_back(w, b);
+        graph[b].emplace_back(w, a);
     }
+
+    for (int i = 0; i < n; i++) sort(graph[i].rbegin(), graph[i].rend());
 
     for (int i = 0; i < 8; i++) {
         bool ok = false;

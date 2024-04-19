@@ -1,35 +1,46 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-bitset <1000> a[20];
+const int MAX_N = 1000;
+const int MAX_M = 20;
+
+int n, m, cnt, ans;
+vector <int> a[MAX_M], idx;
+int mp[MAX_N];
+
+void solve(int i, int c) {
+    if (c >= ans) return;
+    if (cnt == n) return void(ans = c);
+    
+    for (int j = i; j < m; j++) {
+        for (auto v : a[idx[j]]) if (mp[v]++ == 0) cnt++;
+        solve(j + 1, c + 1);
+        for (auto v : a[idx[j]]) if (--mp[v] == 0) cnt--;
+    }
+}
 
 int main() {
     cin.tie(nullptr)->sync_with_stdio(false);
-
-    int n, m;
+    
     cin >> n >> m;
-
     for (int i = 0; i < m; i++) {
         int k;
         cin >> k;
 
-        while (k--) {
-            int d;
-            cin >> d;
-
-            d--;
-            a[i][d] = 1;
+        idx.push_back(i);
+        a[i].resize(k);
+        for (auto &x : a[i]) {
+            cin >> x;
+            x--;
         }
     }
 
-    int ans = m;
-    for (int mask = 0; mask < (1<<m); mask++) {
-        bitset <1000> chk;
-        for (int i = 0; i < m; i++) {
-            if (mask & (1<<i)) chk = chk | a[i];
-        }
-        if (chk.count() == n) ans = min(ans, __builtin_popcount(mask));
-    }
+    sort(idx.begin(), idx.end(), [&](const int &x, const int &y) {
+        return a[x].size() > a[y].size();
+    });
+
+    ans = m;
+    solve(0, 0);
     cout << ans;
     return 0;
 }
